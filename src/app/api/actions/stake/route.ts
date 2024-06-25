@@ -2,7 +2,7 @@ import { ActionGetResponse } from "@/types";
 
 async function GET() {
 	const config: ActionGetResponse = {
-		icon: "https://blink.sunrisestake.com/logo.svg",
+		icon: "https://sunrise-blink.vercel.app/action-image.png",
 		title: "Offset carbon while you sleep",
 		description:
 			"Offset your carbon footprint by staking with Sunruse Stake",
