@@ -12,24 +12,24 @@ async function GET() {
 		icon: "https://sunrise-blink.vercel.app/action-image.png",
 		title: "Offset carbon while you sleep",
 		description:
-			"Offset your carbon footprint by staking with Sunruse Stake",
+			"Offset your carbon footprint by staking with Sunrise Stake",
 		label: "Offset carbon",
 		links: {
 			actions: [
 				{
-					href: "https://blink.sunrisestake.com/api/actions/stake?amount=0.1",
+					href: "https://sunrise-blink.vercel.app/api/actions/stake?amount=0.1",
 					label: "0.1 SOL",
 				},
 				{
-					href: "https://blink.sunrisestake.com/api/actions/stake?amount=0.25",
+					href: "https://sunrise-blink.vercel.app/api/actions/stake?amount=0.25",
 					label: "0.25 SOL",
 				},
 				{
-					href: "https://blink.sunrisestake.com/api/actions/stake?amount=0.5",
+					href: "https://sunrise-blink.vercel.app/api/actions/stake?amount=0.5",
 					label: "0.5 SOL",
 				},
 				{
-					href: "https://blink.sunrisestake.com/api/actions/stake",
+					href: "https://sunrise-blink.vercel.app/api/actions/stake",
 					label: "Stake",
 					parameters: [
 						{
