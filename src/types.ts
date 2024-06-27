@@ -40,3 +40,15 @@ export interface ActionGetResponse {
 	/** optional (non-fatal) error message */
 	error?: ActionError;
 }
+
+export interface ActionPostRequest {
+	/** The public key of the user */
+	account: string;
+}
+
+export interface ActionPostResponse {
+	/** A base64 encoded transaction */
+	transaction: string;
+	/** An optional message */
+	message?: string;
+}
