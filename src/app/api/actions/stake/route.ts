@@ -7,6 +7,19 @@ import { NextRequest } from "next/server";
 import { ActionGetResponse, ActionPostRequest } from "@/types";
 import { solToLamports } from "@/utils";
 
+async function OPTIONS() {
+	return new Response(null, {
+		status: 200,
+		headers: {
+			"Access-Control-Allow-Origin": "*",
+			"Access-Control-Allow-Methods": "GET, HEAD, OPTIONS, POST",
+			"Access-Control-Allow-Headers":
+				"Content-Type, Authorization, Content-Encoding, Accept-Encoding",
+			Allow: "GET, HEAD, OPTIONS, POST",
+		},
+	});
+}
+
 async function GET() {
 	const config: ActionGetResponse = {
 		icon: `${process.env.ASSETS_URL}/action-stake.png`,
@@ -43,7 +56,16 @@ async function GET() {
 		},
 	};
 
-	return Response.json(config);
+	return Response.json(config, {
+		status: 200,
+		headers: {
+			"Access-Control-Allow-Origin": "*",
+			"Access-Control-Allow-Methods": "GET, HEAD, OPTIONS, POST",
+			"Access-Control-Allow-Headers":
+				"Content-Type, Authorization, Content-Encoding, Accept-Encoding",
+			Allow: "GET, HEAD, OPTIONS, POST",
+		},
+	});
 }
 
 async function POST(request: NextRequest) {
@@ -98,11 +120,22 @@ async function POST(request: NextRequest) {
 		verifySignatures: false,
 	});
 	const encodedTx = Buffer.from(serializedTx).toString("base64");
-	console.log(encodedTx);
 
-	return Response.json({
-		transaction: encodedTx,
-	});
+	return Response.json(
+		{
+			transaction: encodedTx,
+		},
+		{
+			status: 200,
+			headers: {
+				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Methods": "GET, HEAD, OPTIONS, POST",
+				"Access-Control-Allow-Headers":
+					"Content-Type, Authorization, Content-Encoding, Accept-Encoding",
+				Allow: "GET, HEAD, OPTIONS, POST",
+			},
+		},
+	);
 }
 
-export { GET, POST };
+export { GET, OPTIONS, POST };
