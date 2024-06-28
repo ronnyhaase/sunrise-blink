@@ -9,7 +9,7 @@ import { solToLamports } from "@/utils";
 
 async function GET() {
 	const config: ActionGetResponse = {
-		icon: "https://sunrise-blink.vercel.app/action-image.png",
+		icon: `${process.env.ASSETS_URL}/action-stake-image.png`,
 		title: "Offset carbon while you sleep",
 		description:
 			"Offset your carbon footprint by staking with Sunrise Stake",
@@ -17,19 +17,19 @@ async function GET() {
 		links: {
 			actions: [
 				{
-					href: "https://sunrise-blink.vercel.app/api/actions/stake?amount=0.1",
+					href: `${process.env.ACTIONS_URL}/api/actions/stake?amount=0.1`,
 					label: "0.1 SOL",
 				},
 				{
-					href: "https://sunrise-blink.vercel.app/api/actions/stake?amount=0.25",
+					href: `${process.env.ACTIONS_URL}/api/actions/stake?amount=0.25`,
 					label: "0.25 SOL",
 				},
 				{
-					href: "https://sunrise-blink.vercel.app/api/actions/stake?amount=0.5",
+					href: `${process.env.ACTIONS_URL}/api/actions/stake?amount=0.5`,
 					label: "0.5 SOL",
 				},
 				{
-					href: "https://sunrise-blink.vercel.app/api/actions/stake",
+					href: `${process.env.ACTIONS_URL}/api/actions/stake`,
 					label: "Stake",
 					parameters: [
 						{
@@ -76,7 +76,9 @@ async function POST(request: NextRequest) {
 		signAllTransactions: () =>
 			Promise.reject(new Error("Dummy wallet can't sign")),
 	};
-	const connection = new Connection(clusterApiUrl("mainnet-beta"));
+	const connection = new Connection(
+		process.env.RPC_URL || clusterApiUrl("mainnet-beta"),
+	);
 	const provider = new AnchorProvider(
 		// @ts-ignore - Connection incompatible with Connection ¯\_(ツ)_/¯
 		connection,
