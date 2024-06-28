@@ -1,22 +1,22 @@
 import { AnchorProvider } from "@coral-xyz/anchor";
+import {
+	ACTIONS_CORS_HEADERS,
+	ActionPostResponse,
+	type ActionGetResponse,
+	type ActionPostRequest,
+	createPostResponse,
+} from "@solana/actions";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import { SunriseStakeClient } from "@sunrisestake/client";
 import { NextRequest } from "next/server";
 
-import { ActionGetResponse, ActionPostRequest } from "@/types";
 import { solToLamports } from "@/utils";
 
 async function OPTIONS() {
 	return new Response(null, {
 		status: 200,
-		headers: {
-			"Access-Control-Allow-Origin": "*",
-			"Access-Control-Allow-Methods": "GET, HEAD, OPTIONS, POST",
-			"Access-Control-Allow-Headers":
-				"Content-Type, Authorization, Content-Encoding, Accept-Encoding",
-			Allow: "GET, HEAD, OPTIONS, POST",
-		},
+		headers: ACTIONS_CORS_HEADERS,
 	});
 }
 
@@ -58,13 +58,7 @@ async function GET() {
 
 	return Response.json(config, {
 		status: 200,
-		headers: {
-			"Access-Control-Allow-Origin": "*",
-			"Access-Control-Allow-Methods": "GET, HEAD, OPTIONS, POST",
-			"Access-Control-Allow-Headers":
-				"Content-Type, Authorization, Content-Encoding, Accept-Encoding",
-			Allow: "GET, HEAD, OPTIONS, POST",
-		},
+		headers: ACTIONS_CORS_HEADERS,
 	});
 }
 
@@ -112,30 +106,19 @@ async function POST(request: NextRequest) {
 		WalletAdapterNetwork.Mainnet,
 	);
 
-	const tx = await client.deposit(lamports, account);
-	tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
-	tx.feePayer = account;
-	const serializedTx = tx.serialize({
-		requireAllSignatures: false,
-		verifySignatures: false,
+	const transaction = await client.deposit(lamports, account);
+	transaction.recentBlockhash = (
+		await connection.getLatestBlockhash()
+	).blockhash;
+	transaction.feePayer = account;
+	const payload: ActionPostResponse = await createPostResponse({
+		fields: { transaction },
 	});
-	const encodedTx = Buffer.from(serializedTx).toString("base64");
 
-	return Response.json(
-		{
-			transaction: encodedTx,
-		},
-		{
-			status: 200,
-			headers: {
-				"Access-Control-Allow-Origin": "*",
-				"Access-Control-Allow-Methods": "GET, HEAD, OPTIONS, POST",
-				"Access-Control-Allow-Headers":
-					"Content-Type, Authorization, Content-Encoding, Accept-Encoding",
-				Allow: "GET, HEAD, OPTIONS, POST",
-			},
-		},
-	);
+	return Response.json(payload, {
+		status: 200,
+		headers: ACTIONS_CORS_HEADERS,
+	});
 }
 
 export { GET, OPTIONS, POST };
