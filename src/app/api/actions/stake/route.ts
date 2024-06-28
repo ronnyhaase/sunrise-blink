@@ -9,7 +9,7 @@ import { solToLamports } from "@/utils";
 
 async function GET() {
 	const config: ActionGetResponse = {
-		icon: `${process.env.ASSETS_URL}/action-stake-image.png`,
+		icon: `${process.env.ASSETS_URL}/action-stake.png`,
 		title: "Offset carbon while you sleep",
 		description:
 			"Offset your carbon footprint by staking with Sunrise Stake",
