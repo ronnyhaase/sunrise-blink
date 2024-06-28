@@ -9,6 +9,7 @@ import {
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
 import { SunriseStakeClient } from "@sunrisestake/client";
+import BN from "bn.js";
 import { NextRequest } from "next/server";
 
 import { solToLamports } from "@/utils";
@@ -42,13 +43,13 @@ async function GET() {
 					label: "0.5 SOL",
 				},
 				{
-					href: `${process.env.ACTIONS_URL}/api/actions/stake`,
+					href: `${process.env.ACTIONS_URL}/api/actions/stake?amount={amount}`,
 					label: "Stake",
 					parameters: [
 						{
 							name: "amount",
 							label: "Enter a custom SOL amount",
-							required: false,
+							required: true,
 						},
 					],
 				},
@@ -69,8 +70,11 @@ async function POST(request: NextRequest) {
 		account = new PublicKey(body.account);
 	} catch (error) {
 		return Response.json(
-			{ error: "Invalid or missing account" },
-			{ status: 400 },
+			{ message: "Invalid or missing account" },
+			{
+				status: 400,
+				headers: ACTIONS_CORS_HEADERS,
+			},
 		);
 	}
 
@@ -79,11 +83,25 @@ async function POST(request: NextRequest) {
 	const amount = params.get("amount");
 	if (!amount) {
 		return Response.json(
-			{ error: "Invalid or missing amount" },
-			{ status: 400 },
+			{ message: "Amount is missing" },
+			{
+				status: 400,
+				headers: ACTIONS_CORS_HEADERS,
+			},
 		);
 	}
-	const lamports = solToLamports(amount);
+	let lamports: BN;
+	try {
+		lamports = solToLamports(amount);
+	} catch (error) {
+		return Response.json(
+			{ message: "Amount is invalid" },
+			{
+				status: 400,
+				headers: ACTIONS_CORS_HEADERS,
+			},
+		);
+	}
 
 	const dummyWallet = {
 		publicKey: account,
