@@ -133,10 +133,13 @@ async function POST(request: NextRequest) {
 		fields: { transaction },
 	});
 
-	return Response.json(payload, {
-		status: 200,
-		headers: ACTIONS_CORS_HEADERS,
-	});
+	return Response.json(
+		{ ...payload, message: "Thank you for your support!" },
+		{
+			status: 200,
+			headers: ACTIONS_CORS_HEADERS,
+		},
+	);
 }
 
 export { GET, OPTIONS, POST };
